@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Fraunces", Georgia, serif;
+
+    --color-navy-50: #f4f6fb;
+    --color-navy-100: #e7ebf5;
+    --color-navy-200: #cbd5ea;
+    --color-navy-300: #a3b4d8;
+    --color-navy-400: #748cc0;
+    --color-navy-500: #526aa6;
+    --color-navy-600: #3f528a;
+    --color-navy-700: #344270;
+    --color-navy-800: #1d2745;
+    --color-navy-900: #141c33;
+    --color-navy-950: #0b1220;
+
+    --color-gold-300: #f4d488;
+    --color-gold-400: #e8b949;
+    --color-gold-500: #d4a017;
+    --color-gold-600: #b3850f;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Scroll-reveal — elements fade/slide in once when they enter the viewport */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+.font-display {
+    font-family: var(--font-display);
+}
+
+.status-dot::before {
+    content: "";
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    margin-right: 0.5rem;
+    background: currentColor;
+}
+
+/* Timeline */
+.timeline-item:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 0.55rem;
+    top: 1.6rem;
+    bottom: -0.4rem;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+@media print {
+    .no-print { display: none !important; }
+}
