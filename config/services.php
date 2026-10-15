@@ -36,7 +36,8 @@ return [
     ],
 
     'smartsupp' => [
-        'key' => env('SMARTSUPP_KEY'),
+        // Public embed key — visible in page source anyway, safe to default here.
+        'key' => env('SMARTSUPP_KEY', '04003c10e5cd7f37ab470bbf2a64ccbdd0ffa9be'),
     ],
 
 ];
