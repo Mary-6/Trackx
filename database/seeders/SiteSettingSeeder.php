@@ -15,7 +15,7 @@ class SiteSettingSeeder extends Seeder
             'company_description' => 'Aurevia Courier Express provides secure, transparent shipment tracking for parcels, freight and goods of every kind, worldwide.',
             'brand_accent' => 'gold',
             'contact_email' => 'aureviacourierexpress@gmail.com',
-            'support_phone' => '+1 (555) 010-2030',
+            'support_phone' => '+1 (817) 471-3896',
             'office_address' => '12 Meridian Wharf, London E14, United Kingdom',
             'business_hours' => 'Monday – Friday, 09:00 – 18:00 GMT',
             'footer_about' => 'Aurevia Courier Express provides secure, tracked transport for parcels, documents, electronics and commercial cargo worldwide.',

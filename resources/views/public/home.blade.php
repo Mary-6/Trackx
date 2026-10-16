@@ -194,6 +194,39 @@
     </div>
 </section>
 
+{{-- Testimonials --}}
+<section class="bg-white pb-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl" data-reveal>
+            <p class="text-sm font-semibold uppercase tracking-[0.25em] text-gold-500">Customer Reviews</p>
+            <h2 class="mt-3 font-display text-3xl font-semibold text-navy-950 sm:text-4xl">Trusted by senders and receivers</h2>
+        </div>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            @php
+                $reviews = [
+                    ['quote' => 'My parcel arrived two days early and every status update was accurate — I could see exactly where it was the whole way.', 'name' => 'Amara N.', 'role' => 'Boutique owner', 'rating' => 5],
+                    ['quote' => 'They handled a fragile consignment professionally and the live map was genuinely reassuring throughout.', 'name' => 'Daniel K.', 'role' => 'Electronics reseller', 'rating' => 4.5],
+                    ['quote' => 'Good communication from booking to delivery. There was a short customs delay but they kept me informed.', 'name' => 'Grace A.', 'role' => 'Online shopper', 'rating' => 4],
+                    ['quote' => 'Fast pickup, transparent pricing, and the tracking page with the barcode is genuinely useful.', 'name' => 'Marcus T.', 'role' => 'Small business owner', 'rating' => 5],
+                ];
+            @endphp
+            @foreach($reviews as $review)
+                <div class="flex flex-col rounded-2xl border border-navy-100 bg-navy-50 p-6" data-reveal>
+                    <x-star-rating :rating="$review['rating']" />
+                    <p class="mt-4 flex-1 text-sm leading-6 text-navy-600">"{{ $review['quote'] }}"</p>
+                    <div class="mt-5 flex items-center gap-3 border-t border-navy-100 pt-4">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-navy-950 text-xs font-bold text-gold-400">{{ strtoupper(collect(explode(' ', $review['name']))->map(fn($w) => $w[0])->take(2)->implode('')) }}</span>
+                        <div>
+                            <p class="text-sm font-semibold text-navy-950">{{ $review['name'] }}</p>
+                            <p class="text-xs text-navy-400">{{ $review['role'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 {{-- Support CTA --}}
 <section class="bg-white pb-20 pt-4">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
