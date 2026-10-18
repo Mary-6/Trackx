@@ -8,23 +8,36 @@ use Illuminate\Support\Str;
 class TrackingNumberGenerator
 {
     /**
-     * Generate a unique, short public tracking number.
-     * Format: ACE-XXXXXX — Aurevia Courier Express prefix + 6 random digits.
+     * Charset excludes ambiguous characters (I, O, 0, 1) for readability.
+     */
+    private const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+    private const LENGTH = 12;
+
+    /**
+     * Generate a unique tracking number — 12 mixed uppercase letters and digits,
+     * guaranteed to contain at least one letter and one digit. No prefix.
      */
     public function generate(): string
     {
         do {
-            $number = 'ACE-'.str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        } while (Shipment::where('tracking_number', $number)->exists());
+            $number = '';
+            for ($i = 0; $i < self::LENGTH; $i++) {
+                $number .= self::ALPHABET[random_int(0, strlen(self::ALPHABET) - 1)];
+            }
+        } while (! $this->isValidFormat($number) || Shipment::where('tracking_number', $number)->exists());
 
         return $number;
     }
 
     /**
-     * Validate the public format (not existence).
+     * Validate the public format (not existence): 10–24 chars, uppercase letters
+     * and digits, at least one of each, no separators.
      */
     public function isValidFormat(string $number): bool
     {
-        return (bool) preg_match('/^ACE-\d{6}$/', Str::upper(trim($number)));
+        $n = Str::upper(trim($number));
+
+        return (bool) preg_match('/^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{10,24}$/', $n);
     }
 }

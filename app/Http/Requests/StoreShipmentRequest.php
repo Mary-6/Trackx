@@ -19,7 +19,7 @@ class StoreShipmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tracking_number' => ['nullable', 'string', 'max:32', 'regex:/^[A-Z0-9][A-Z0-9\-]{4,31}$/i', 'unique:shipments,tracking_number'],
+            'tracking_number' => ['nullable', 'string', 'max:32', 'regex:/^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{10,24}$/', 'unique:shipments,tracking_number'],
             'shipment_category_id' => ['required_without:category_name', 'nullable', 'exists:shipment_categories,id'],
             'category_name' => ['required_without:shipment_category_id', 'nullable', 'string', 'max:80'],
             'new_category' => ['nullable', 'string', 'max:80'],

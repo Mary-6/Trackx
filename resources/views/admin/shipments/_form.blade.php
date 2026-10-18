@@ -3,6 +3,17 @@
     $v = fn (string $k, $default = '') => old($k, $s?->{$k} ?? $default);
     $req = '<span class="text-gold-600">*</span>';
     $in = 'mt-1 w-full rounded-lg border-navy-200 shadow-sm focus:border-gold-500 focus:ring-gold-500';
+    $countries = App\Support\Countries::all();
+    $countryOpts = function (string $current) use ($countries, $in) {
+        $sel = '<select %s class="'.$in.'"><option value="">Select country…</option>';
+        foreach ($countries as $c) {
+            $sel .= '<option value="'.$c.'"'.($c === $current ? ' selected' : '').'>'.$c.'</option>';
+        }
+        if ($current !== '' && ! in_array($current, $countries, true)) {
+            $sel .= '<option value="'.e($current).'" selected>'.e($current).'</option>';
+        }
+        return $sel.'</select>';
+    };
 @endphp
 
 <div class="grid gap-8 lg:grid-cols-2">
@@ -102,7 +113,7 @@
                 <div class="sm:col-span-2"><label class="text-sm font-medium text-navy-800">Street address</label><input name="sender_address" value="{{ $v('sender_address') }}" class="{{ $in }}"></div>
                 <div><label class="text-sm font-medium text-navy-800">City</label><input name="sender_city" value="{{ $v('sender_city') }}" class="{{ $in }}"></div>
                 <div><label class="text-sm font-medium text-navy-800">State</label><input name="sender_state" value="{{ $v('sender_state') }}" class="{{ $in }}"></div>
-                <div><label class="text-sm font-medium text-navy-800">Country</label><input name="sender_country" value="{{ $v('sender_country') }}" class="{{ $in }}"></div>
+                <div><label class="text-sm font-medium text-navy-800">Country</label>{!! sprintf($countryOpts($v('sender_country')), 'name="sender_country"') !!}</div>
             </div>
         </section>
 
@@ -116,7 +127,7 @@
                 <div class="sm:col-span-2"><label class="text-sm font-medium text-navy-800">Street address</label><input name="recipient_address" value="{{ $v('recipient_address') }}" class="{{ $in }}"></div>
                 <div><label class="text-sm font-medium text-navy-800">City</label><input name="recipient_city" value="{{ $v('recipient_city') }}" class="{{ $in }}"></div>
                 <div><label class="text-sm font-medium text-navy-800">State</label><input name="recipient_state" value="{{ $v('recipient_state') }}" class="{{ $in }}"></div>
-                <div><label class="text-sm font-medium text-navy-800">Country</label><input name="recipient_country" value="{{ $v('recipient_country') }}" class="{{ $in }}"></div>
+                <div><label class="text-sm font-medium text-navy-800">Country</label>{!! sprintf($countryOpts($v('recipient_country')), 'name="recipient_country"') !!}</div>
             </div>
             <p class="mt-3 text-xs text-navy-400">Public visibility of each field is controlled in Settings → Public Tracking Page Privacy.</p>
         </section>

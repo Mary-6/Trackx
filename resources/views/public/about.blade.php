@@ -14,9 +14,12 @@
 <section class="bg-white py-16">
     <div class="mx-auto max-w-4xl space-y-10 px-4 sm:px-6">
         <div>
-            <h2 class="font-display text-2xl font-semibold text-navy-950">What we do</h2>
+            <h2 class="font-display text-2xl font-semibold text-navy-950">Our story — since 2019</h2>
             <p class="mt-3 leading-7 text-navy-600">
-                {{ setting('company_name') }} is a logistics and delivery company moving documents, parcels, electronics, fashion and commercial cargo worldwide. Our platform gives every consignment a unique tracking number and a verifiable history of confirmed events.
+                {{ setting('company_name') }} began in 2019 as a small courier operation handling documents and parcels for local businesses. Over the years we grew into a full logistics company moving documents, parcels, electronics, fashion and commercial cargo — domestic and international — with the same obsession we started with: shipments you can actually see.
+            </p>
+            <p class="mt-4 leading-7 text-navy-600">
+                Every consignment on this platform gets a unique tracking number and a verifiable history of confirmed events. This website is the latest chapter of that journey — the same hands-on service, now with live tracking your customers can check from anywhere.
             </p>
             <img src="{{ asset('images/warehouse.jpg') }}" alt="Our fulfilment warehouse" class="mt-6 w-full rounded-2xl object-cover shadow-lg" loading="lazy">
         </div>

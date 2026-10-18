@@ -21,14 +21,14 @@ class TrackingTest extends TestCase
 
     public function test_valid_tracking_lookup_shows_shipment(): void
     {
-        $shipment = Shipment::factory()->create(['tracking_number' => 'ACE-100001']);
+        $shipment = Shipment::factory()->create(['tracking_number' => 'B4N7P2D8S5TZ']);
 
-        $this->post('/track', ['tracking_number' => 'ace-100001'])
-            ->assertRedirect('/track/ACE-100001');
+        $this->post('/track', ['tracking_number' => 'b4n7p2d8s5tz'])
+            ->assertRedirect('/track/B4N7P2D8S5TZ');
 
-        $this->get('/track/ACE-100001')
+        $this->get('/track/B4N7P2D8S5TZ')
             ->assertOk()
-            ->assertSee('ACE-100001')
+            ->assertSee('B4N7P2D8S5TZ')
             ->assertSee('Shipment Created')
             ->assertSee('Geneva')
             ->assertSee('London');
@@ -36,7 +36,7 @@ class TrackingTest extends TestCase
 
     public function test_invalid_tracking_number_shows_not_found(): void
     {
-        $this->get('/track/ACE-000000')
+        $this->get('/track/ZX9K4J7W3H2M')
             ->assertOk()
             ->assertSee('Shipment Not Found');
     }
@@ -99,13 +99,13 @@ class TrackingTest extends TestCase
 
     public function test_tracking_result_renders_dynamic_barcode(): void
     {
-        $shipment = Shipment::factory()->create(['tracking_number' => 'ACE-654321']);
+        $shipment = Shipment::factory()->create(['tracking_number' => 'M6R8T3P9K2XV']);
 
         $html = $this->get('/track/'.$shipment->tracking_number)->assertOk()->getContent();
 
         // picqer renders an inline SVG barcode generated from the actual number
         $this->assertStringContainsString('<g id="bars"', $html);
-        $this->assertStringContainsString('<desc>ACE-654321</desc>', $html);
+        $this->assertStringContainsString('<desc>M6R8T3P9K2XV</desc>', $html);
         $this->assertStringContainsString('PACKAGE TRACKING INFORMATION', strtoupper($html));
     }
 

@@ -51,7 +51,7 @@ class AdminShipmentTest extends TestCase
 
         $shipment = Shipment::latest()->first();
         $this->assertNotNull($shipment);
-        $this->assertMatchesRegularExpression('/^ACE-\d{6}$/', $shipment->tracking_number);
+        $this->assertMatchesRegularExpression('/^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{10,24}$/', $shipment->tracking_number);
         $this->assertSame('shipment-created', $shipment->status->slug);
         $this->assertCount(1, $shipment->trackingEvents);
     }
@@ -80,13 +80,13 @@ class AdminShipmentTest extends TestCase
         $user = User::factory()->manager()->create();
 
         $this->actingAs($user)
-            ->post('/admin/shipments', $this->shipmentData(['tracking_number' => 'CUST-0001-2026']))
+            ->post('/admin/shipments', $this->shipmentData(['tracking_number' => 'CUSTMN2026AB']))
             ->assertRedirect();
 
-        $this->assertDatabaseHas('shipments', ['tracking_number' => 'CUST-0001-2026']);
+        $this->assertDatabaseHas('shipments', ['tracking_number' => 'CUSTMN2026AB']);
 
         $this->actingAs($user)
-            ->post('/admin/shipments', $this->shipmentData(['tracking_number' => 'CUST-0001-2026']))
+            ->post('/admin/shipments', $this->shipmentData(['tracking_number' => 'CUSTMN2026AB']))
             ->assertSessionHasErrors('tracking_number');
     }
 
@@ -218,12 +218,12 @@ class AdminShipmentTest extends TestCase
     public function test_search_finds_shipment_by_tracking_number(): void
     {
         $user = User::factory()->manager()->create();
-        Shipment::factory()->create(['tracking_number' => 'ACE-777777']);
+        Shipment::factory()->create(['tracking_number' => 'W8K3L2M9Q1RX']);
         Shipment::factory()->count(2)->create();
 
         $this->actingAs($user)
-            ->get('/admin/shipments?q=ACE-777')
+            ->get('/admin/shipments?q=W8K3L2M')
             ->assertOk()
-            ->assertSee('ACE-777777');
+            ->assertSee('W8K3L2M9Q1RX');
     }
 }

@@ -29,7 +29,7 @@
                 @csrf
                 <label for="hero-tracking" class="sr-only">Tracking number</label>
                 <input id="hero-tracking" name="tracking_number" type="text" required
-                       placeholder="Enter tracking number — e.g. ACE-XXXXXX"
+                       placeholder="Enter tracking number — e.g. T8K3L2M9Q1RX"
                        class="w-full rounded-lg border-0 bg-white/10 px-5 py-4 text-white placeholder-navy-300 ring-1 ring-inset ring-white/20 backdrop-blur transition focus:bg-white/15 focus:ring-2 focus:ring-gold-400">
                 <button type="submit" class="shrink-0 rounded-lg bg-gold-400 px-8 py-4 font-semibold text-navy-950 shadow-lg shadow-gold-500/20 transition hover:bg-gold-300">
                     Track Now
@@ -176,7 +176,7 @@
         <h2 class="text-center font-display text-3xl font-semibold text-navy-950" data-reveal>Frequently Asked Questions</h2>
         <div class="mt-10 space-y-4" x-data="{ open: null }" data-reveal>
             @foreach([
-                ['How do I track my shipment?', 'Enter your tracking number (format ACE-XXXXXX) on the Track Shipment page. You will see the latest confirmed status, timeline and, where available, the last confirmed location on the map.'],
+                ['How do I track my shipment?', 'Enter your tracking number (a 12-character code like T8K3L2M9Q1RX) on the Track Shipment page. You will see the latest confirmed status, timeline and, where available, the last confirmed location on the map.'],
                 ['Do I need an account to track?', 'No. Tracking is public but privacy-limited — only the shipment details the business has approved for display are shown.'],
                 ['What does the map show?', 'The map displays the last confirmed location recorded by our staff or an authorised tracking integration, plus origin and destination markers when coordinates exist. It is not a simulated animation.'],
                 ['Can you ship high-value or fragile goods?', 'Yes — our secure-goods channel includes discreet packaging, optional insurance and signature confirmation. Contact support before dispatch for requirements.'],

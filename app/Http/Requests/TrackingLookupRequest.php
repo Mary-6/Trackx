@@ -20,6 +20,7 @@ class TrackingLookupRequest extends FormRequest
 
     public function trackingNumber(): string
     {
-        return strtoupper(trim($this->input('tracking_number')));
+        // Customers may type/copy numbers with hyphens or spaces — strip them.
+        return strtoupper(preg_replace('/[\s\-_]/', '', (string) $this->input('tracking_number')));
     }
 }

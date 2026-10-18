@@ -86,7 +86,7 @@ class LocationApiTest extends TestCase
         $token = User::factory()->superAdmin()->create()->createToken('gps', ['update-location'])->plainTextToken;
 
         $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/v1/shipments/ACE-000000/location', [
+            ->postJson('/api/v1/shipments/ZX9K4J7W3H2M/location', [
                 'latitude' => 10, 'longitude' => 10,
             ])->assertNotFound();
     }

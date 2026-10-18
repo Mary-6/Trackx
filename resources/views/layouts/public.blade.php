@@ -16,6 +16,35 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script type="application/ld+json">
+    @php
+        echo json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => setting('company_name', config('app.name')),
+            'url' => url('/'),
+            'logo' => asset('favicon.svg'),
+            'description' => setting('company_description'),
+            'contactPoint' => array_filter([
+                '@type' => 'ContactPoint',
+                'telephone' => setting('support_phone'),
+                'email' => setting('contact_email'),
+                'contactType' => 'customer service',
+                'availableLanguage' => 'English',
+            ], fn ($v) => filled($v)),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    @endphp
+    </script>
+    <script type="application/ld+json">
+    @php
+        echo json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => setting('company_name', config('app.name')),
+            'url' => url('/'),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    @endphp
+    </script>
     @stack('head')
 </head>
 <body class="flex min-h-full flex-col bg-white font-sans text-navy-900 antialiased">

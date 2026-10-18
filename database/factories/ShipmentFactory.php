@@ -6,6 +6,7 @@ use App\Models\Shipment;
 use App\Models\ShipmentCategory;
 use App\Models\ShipmentStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ShipmentFactory extends Factory
 {
@@ -14,7 +15,7 @@ class ShipmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'tracking_number' => 'ACE-'.str_pad((string) fake()->unique()->numberBetween(0, 999999), 6, '0', STR_PAD_LEFT),
+            'tracking_number' => strtoupper(Str::random(10)).(string) fake()->unique()->numberBetween(10, 99),
             'shipment_category_id' => ShipmentCategory::factory(),
             'shipment_status_id' => ShipmentStatus::where('slug', 'shipment-created')->value('id')
                 ?? ShipmentStatus::create(['name' => 'Shipment Created', 'slug' => 'shipment-created'])->id,

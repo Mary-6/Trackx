@@ -65,7 +65,7 @@ Enforced server-side via `ShipmentPolicy`, `CustomerPolicy`, the `role:` middlew
 
 ## Tracking
 
-- Public lookup at `/track` → `/track/{ACE-XXXXXX}`.
+- Public lookup at `/track` → `/track` → `/track/T8K3L2M9Q1RX`.
 - Results page: **barcode** (CODE128 generated per tracking number), Package Tracking Information header, Shipment Information rows, Receiver/Sender sections, Shipment History table, live map.
 - 15 database-driven statuses (`shipment_statuses` table), append-only `tracking_events` history.
 - **Privacy-gated parties**: `public_sender_fields` / `public_receiver_fields` settings (Admin → Settings → Public Tracking Page Privacy) decide which sender/receiver fields render. Empty fields never render a row — no "N/A" placeholders.

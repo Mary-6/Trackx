@@ -25,7 +25,7 @@ class TrackingController extends Controller
 
     public function result(string $trackingNumber): View
     {
-        $number = strtoupper(trim($trackingNumber));
+        $number = strtoupper(preg_replace('/[\s\-_]/', '', (string) $trackingNumber));
 
         $shipment = Shipment::with(['category', 'status', 'trackingEvents.status', 'locations'])
             ->where('tracking_number', $number)

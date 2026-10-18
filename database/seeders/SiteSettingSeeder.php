@@ -111,7 +111,7 @@ Effective date: 2026
 Documents, personal parcels, electronics, fashion, commercial cargo, and fragile or high-value goods with enhanced handling — domestic and international.
 
 ## Tracking
-Every consignment receives a unique tracking number (format ACE-XXXXXX) which can be entered on our tracking page for the latest confirmed status, event history and last confirmed location. Location updates reflect genuine recorded data from our operations team or authorised tracking integrations — never simulated movement.
+Every consignment receives a unique tracking number (12 mixed letters and digits, e.g. T8K3L2M9Q1RX) which can be entered on our tracking page for the latest confirmed status, event history and last confirmed location. Location updates reflect genuine recorded data from our operations team or authorised tracking integrations — never simulated movement.
 
 ## Transit times and delivery estimates
 Estimated delivery dates are displayed on the tracking page once confirmed by our team. International shipments may be subject to customs clearance delays outside our control. Estimates are indicative and not guaranteed.

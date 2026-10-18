@@ -14,7 +14,7 @@
             <label for="tracking_number" class="sr-only">Tracking number</label>
             <input id="tracking_number" name="tracking_number" type="text" required autofocus
                    value="{{ old('tracking_number', $trackingNumber ?? '') }}"
-                   placeholder="ACE-XXXXXX"
+                   placeholder="T8K3L2M9Q1RX"
                    class="w-full rounded-lg border-0 bg-white/10 px-5 py-4 text-center text-lg tracking-wider text-white placeholder-navy-400 ring-1 ring-inset ring-white/20 focus:ring-2 focus:ring-gold-400 sm:text-left">
             <button type="submit" class="shrink-0 rounded-lg bg-gold-400 px-8 py-4 font-semibold text-navy-950 transition hover:bg-gold-300">Track</button>
         </form>

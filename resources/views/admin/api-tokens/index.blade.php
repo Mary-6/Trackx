@@ -21,7 +21,7 @@
         </form>
         <div class="mt-6 rounded-lg bg-navy-50 p-4 text-xs leading-5 text-navy-600">
             <p class="font-semibold text-navy-800">Usage</p>
-            <pre class="mt-2 overflow-auto">curl -X POST {{ url('/api/v1/shipments/ACE-XXXXXX/location') }} \
+            <pre class="mt-2 overflow-auto">curl -X POST {{ url('/api/v1/shipments/T8K3L2M9Q1RX/location') }} \
   -H "Authorization: Bearer &lt;token&gt;" \
   -H "Content-Type: application/json" \
   -d '{"latitude":51.5,"longitude":-0.12,"location_name":"London hub"}'</pre>

@@ -15,7 +15,7 @@
     <div class="mx-auto max-w-4xl px-4 sm:px-6" x-data="{ open: 0 }">
         @php
             $faqs = [
-                ['How do I track my shipment?', 'Enter your tracking number on the Track Shipment page. Numbers look like ACE-XXXXXX and are provided at booking. You will see the latest confirmed status, the full event timeline, and a map of the last confirmed location where coordinates exist.'],
+                ['How do I track my shipment?', 'Enter your tracking number on the Track Shipment page. Numbers are 12 mixed letters and digits, like T8K3L2M9Q1RX, and are provided at booking. You will see the latest confirmed status, the full event timeline, and a map of the last confirmed location where coordinates exist.'],
                 ['What do the tracking statuses mean?', 'Statuses progress from "Shipment Created" through "Dispatched", "In Transit", customs milestones where relevant, "Out for Delivery" and "Delivered". Exception statuses like "On Hold" or "Delivery Exception" mean our team is actively handling an issue — contact support for details.'],
                 ['Is the map live GPS?', 'The map shows the latest confirmed, recorded location — written by our operations team or an authorised courier/GPS integration — plus origin and destination markers. It is honest data: if no coordinates have been recorded yet, the map says so rather than guessing.'],
                 ['Why can\'t I see the recipient\'s address or phone number?', 'Privacy by design. Public tracking pages only display non-sensitive shipment information. Contact details and full street addresses are restricted to authorised staff.'],
