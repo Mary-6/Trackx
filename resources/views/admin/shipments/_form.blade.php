@@ -56,6 +56,18 @@
                 </div>
             @endisset
             <div>
+                <label class="text-sm font-medium text-navy-800">Method of Shipment</label>
+                <select name="shipping_method" class="{{ $in }}">
+                    <option value="">Select method…</option>
+                    @foreach(['Air Freight', 'Sea Freight', 'Road Transport', 'Rail Freight'] as $method)
+                        <option value="{{ $method }}" @selected($v('shipping_method') === $method)>{{ $method }}</option>
+                    @endforeach
+                    @if($v('shipping_method') && ! in_array($v('shipping_method'), ['Air Freight', 'Sea Freight', 'Road Transport', 'Rail Freight'], true))
+                        <option value="{{ $v('shipping_method') }}" selected>{{ $v('shipping_method') }}</option>
+                    @endif
+                </select>
+            </div>
+            <div>
                 <label class="text-sm font-medium text-navy-800">Product name</label>
                 <input name="product_name" value="{{ $v('product_name') }}" class="{{ $in }}">
             </div>
