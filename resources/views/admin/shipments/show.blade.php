@@ -109,82 +109,8 @@
         @endif
     </div>
 
-    {{-- Right column: actions + history + map --}}
+    {{-- Right column: history + map --}}
     <div class="space-y-6 xl:col-span-2">
-        @can('addEvent', $shipment)
-            <div class="rounded-xl border border-navy-100 bg-white p-6 shadow-sm">
-                <h2 class="font-semibold text-navy-950">Add Tracking Event / Update Status</h2>
-                <form method="POST" action="{{ route('admin.shipments.events.store', $shipment) }}" class="mt-4 grid gap-4 sm:grid-cols-3">
-                    @csrf
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Status *</label>
-                        <select name="shipment_status_id" required class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                            @foreach($statuses as $status)
-                                <option value="{{ $status->id }}" @selected($status->id === $shipment->shipment_status_id)>{{ $status->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Location name</label>
-                        <input name="location_name" value="{{ old('location_name') }}" placeholder="City, facility…" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Occurred at</label>
-                        <input name="occurred_at" type="datetime-local" value="{{ old('occurred_at') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Latitude</label>
-                        <input name="latitude" type="number" step="0.0000001" value="{{ old('latitude') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Longitude</label>
-                        <input name="longitude" type="number" step="0.0000001" value="{{ old('longitude') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="text-sm font-medium text-navy-800">Public message</label>
-                        <input name="public_message" value="{{ old('public_message') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Private note</label>
-                        <input name="private_note" value="{{ old('private_note') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <label class="flex items-center gap-2 text-sm text-navy-700 sm:col-span-2">
-                        <input type="checkbox" name="notify_recipient" value="1" class="rounded border-navy-300 text-gold-500 focus:ring-gold-500"> Email the recipient about this update
-                    </label>
-                    <div class="sm:col-span-3">
-                        <button type="submit" class="rounded-lg bg-navy-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy-700">Add Event</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="rounded-xl border border-navy-100 bg-white p-6 shadow-sm">
-                <h2 class="font-semibold text-navy-950">Record Confirmed Location</h2>
-                <p class="mt-1 text-xs text-navy-500">Manually recorded — labelled as a staff update, not continuous GPS.</p>
-                <form method="POST" action="{{ route('admin.shipments.location.update', $shipment) }}" class="mt-4 grid gap-4 sm:grid-cols-4">
-                    @csrf
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Latitude *</label>
-                        <input name="latitude" type="number" step="0.0000001" required value="{{ old('latitude') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Longitude *</label>
-                        <input name="longitude" type="number" step="0.0000001" required value="{{ old('longitude') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Location name</label>
-                        <input name="location_name" value="{{ old('location_name') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-navy-800">Recorded at</label>
-                        <input name="recorded_at" type="datetime-local" value="{{ old('recorded_at') }}" class="mt-1 w-full rounded-lg border-navy-200 text-sm shadow-sm focus:border-gold-500 focus:ring-gold-500">
-                    </div>
-                    <div class="sm:col-span-4">
-                        <button type="submit" class="rounded-lg bg-navy-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-navy-700">Record Location</button>
-                    </div>
-                </form>
-            </div>
-        @endcan
-
         <div class="rounded-xl border border-navy-100 bg-white shadow-sm">
             <h2 class="border-b border-navy-100 px-6 py-4 font-semibold text-navy-950">Full Event History <span class="ml-1 text-xs font-normal text-navy-400">(append-only)</span></h2>
             <div class="overflow-x-auto">

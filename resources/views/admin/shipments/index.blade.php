@@ -67,7 +67,7 @@
             </thead>
             <tbody class="divide-y divide-navy-50">
                 @forelse($shipments as $shipment)
-                    <tr class="hover:bg-navy-50/60 {{ $shipment->isDelayed() ? 'bg-orange-50/50' : '' }}">
+                    <tr class="cursor-pointer hover:bg-navy-50/60 {{ $shipment->isDelayed() ? 'bg-orange-50/50' : '' }}" onclick="window.location='{{ route('admin.shipments.show', $shipment) }}'">
                         <td class="px-5 py-3">
                             <a href="{{ route('admin.shipments.show', $shipment) }}" class="font-mono text-xs font-semibold text-navy-800 hover:text-gold-600">{{ $shipment->tracking_number }}</a>
                             @if($shipment->is_archived)<span class="ml-1 rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-gray-500">archived</span>@endif

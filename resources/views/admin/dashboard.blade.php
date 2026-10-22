@@ -47,7 +47,7 @@
                 </thead>
                 <tbody class="divide-y divide-navy-50">
                     @forelse($recentShipments as $shipment)
-                        <tr class="hover:bg-navy-50/60">
+                        <tr class="cursor-pointer hover:bg-navy-50/60" onclick="window.location='{{ route('admin.shipments.show', $shipment) }}'">
                             <td class="px-6 py-3"><a href="{{ route('admin.shipments.show', $shipment) }}" class="font-mono text-xs font-semibold text-navy-800 hover:text-gold-600">{{ $shipment->tracking_number }}</a></td>
                             <td class="px-6 py-3 text-navy-600">{{ $shipment->category?->name }}</td>
                             <td class="px-6 py-3 text-navy-600">{{ $shipment->destination_city }}, {{ $shipment->destination_country }}</td>

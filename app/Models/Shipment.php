@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Geocoder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -191,22 +192,38 @@ class Shipment extends Model
 
     public function mapPayload(): ?array
     {
-        $hasAny = $this->current_latitude !== null
-            || $this->origin_latitude !== null
-            || $this->destination_latitude !== null;
+        $geo = app(Geocoder::class);
 
-        if (! $hasAny) {
+        // Prefer recorded coordinates; otherwise geocode the location names
+        // entered in shipment details so the map always has real markers.
+        $originLabel = collect([$this->origin_city, $this->origin_country])->filter()->implode(', ') ?: null;
+        $destLabel = collect([$this->destination_city, $this->destination_country])->filter()->implode(', ') ?: null;
+
+        $origin = ($this->origin_latitude !== null)
+            ? ['lat' => (float) $this->origin_latitude, 'lng' => (float) $this->origin_longitude]
+            : $geo->resolve($originLabel);
+        $origin && $origin += ['label' => $originLabel];
+
+        $destination = ($this->destination_latitude !== null)
+            ? ['lat' => (float) $this->destination_latitude, 'lng' => (float) $this->destination_longitude]
+            : $geo->resolve($destLabel);
+        $destination && $destination += ['label' => $destLabel];
+
+        $current = null;
+        if ($this->current_latitude !== null) {
+            $current = ['lat' => (float) $this->current_latitude, 'lng' => (float) $this->current_longitude, 'label' => $this->current_location_name];
+        } elseif ($pt = $geo->resolve($this->current_location_name)) {
+            $current = $pt + ['label' => $this->current_location_name];
+        }
+
+        if (! $origin && ! $destination && ! $current) {
             return null;
         }
 
         return [
-            'origin' => $this->point($this->origin_latitude, $this->origin_longitude, collect([$this->origin_city, $this->origin_country])->filter()->implode(', ') ?: null),
-            'destination' => $this->point($this->destination_latitude, $this->destination_longitude, collect([$this->destination_city, $this->destination_country])->filter()->implode(', ') ?: null),
-            'current' => $this->current_latitude !== null ? [
-                'lat' => (float) $this->current_latitude,
-                'lng' => (float) $this->current_longitude,
-                'label' => $this->current_location_name,
-            ] : null,
+            'origin' => $origin,
+            'destination' => $destination,
+            'current' => $current,
             'path' => $this->locations
                 ->whereNotNull('latitude')
                 ->map(fn (ShipmentLocation $l) => [(float) $l->latitude, (float) $l->longitude])
