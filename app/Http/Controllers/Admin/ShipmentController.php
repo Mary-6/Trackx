@@ -24,12 +24,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ShipmentController extends Controller
 {
-    /** Statuses offered on the create-shipment form, in display order. */
-    public const CREATE_STATUSES = [
-        'delivery-in-progress', 'dispatched', 'in-transit', 'on-hold',
-        'out-for-delivery', 'order-on-hold', 'cancelled', 'processing',
-    ];
-
     public function __construct(
         protected ShipmentService $shipments,
         protected NotificationDispatcher $notifications,
@@ -66,10 +60,7 @@ class ShipmentController extends Controller
         $this->authorize('create', Shipment::class);
 
         return view('admin.shipments.create', [
-            'statuses' => ShipmentStatus::whereIn('slug', self::CREATE_STATUSES)
-                ->get()
-                ->sortBy(fn ($s) => array_search($s->slug, self::CREATE_STATUSES, true))
-                ->values(),
+            'statuses' => ShipmentStatus::active()->get(),
         ]);
     }
 
@@ -112,7 +103,8 @@ class ShipmentController extends Controller
         $this->authorize('update', $shipment);
 
         return view('admin.shipments.edit', [
-            'shipment' => $shipment,
+            'shipment' => $shipment->load('category'),
+            'statuses' => ShipmentStatus::active()->get(),
         ]);
     }
 
@@ -120,6 +112,8 @@ class ShipmentController extends Controller
     {
         $data = $request->validated();
         $this->resolveCategory($data);
+
+        $newStatusId = isset($data['shipment_status_id']) ? (int) $data['shipment_status_id'] : null;
         unset($data['notify_recipient'], $data['shipment_status_id']);
 
         if ($request->hasFile('image')) {
@@ -129,7 +123,21 @@ class ShipmentController extends Controller
             $data['image'] = $request->file('image')->store('shipments', 'public');
         }
 
+        $statusChanged = $newStatusId !== null && $newStatusId !== $shipment->shipment_status_id;
+        $locationChanged = array_key_exists('current_location_name', $data)
+            && ($data['current_location_name'] ?? '') !== ($shipment->current_location_name ?? '');
+
         $this->shipments->update($shipment, $data);
+
+        // Append a tracking milestone only when something meaningful changed —
+        // never on a no-op save, never duplicating an existing entry.
+        if ($statusChanged || $locationChanged) {
+            $this->shipments->addEvent($shipment, $newStatusId ?? $shipment->shipment_status_id, [
+                'location_name' => $data['current_location_name'] ?? null,
+                'source' => TrackingEvent::SOURCE_ADMIN,
+                'user_id' => $request->user()->id,
+            ]);
+        }
 
         return redirect()
             ->route('admin.shipments.show', $shipment)

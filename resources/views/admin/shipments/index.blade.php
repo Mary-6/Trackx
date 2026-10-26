@@ -63,6 +63,7 @@
                     <th class="px-5 py-3">Status</th>
                     <th class="px-5 py-3"><a href="{{ $sortLink('estimated_delivery_date', 'Est. delivery') }}" class="hover:text-navy-800">Est. Delivery {{ $sort === 'estimated_delivery_date' ? ($direction === 'asc' ? '↑' : '↓') : '' }}</a></th>
                     <th class="px-5 py-3"><a href="{{ $sortLink('created_at', 'Created') }}" class="hover:text-navy-800">Created {{ $sort === 'created_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}</a></th>
+                    <th class="px-5 py-3 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-navy-50">
@@ -81,9 +82,15 @@
                         </td>
                         <td class="px-5 py-3 text-xs text-navy-500">{{ $shipment->estimated_delivery_date?->toFormattedDateString() ?? '—' }}</td>
                         <td class="px-5 py-3 text-xs text-navy-500">{{ $shipment->created_at->format('d M Y') }}</td>
+                        <td class="px-5 py-3 text-right whitespace-nowrap" onclick="event.stopPropagation()">
+                            <a href="{{ route('admin.shipments.show', $shipment) }}" class="text-xs font-semibold text-navy-600 hover:text-navy-900">View</a>
+                            @can('update', $shipment)
+                                <a href="{{ route('admin.shipments.edit', $shipment) }}" class="ml-3 rounded bg-navy-800 px-2.5 py-1 text-xs font-semibold text-white hover:bg-navy-700">Edit</a>
+                            @endcan
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="px-5 py-10 text-center text-sm text-navy-400">No shipments match these filters.</td></tr>
+                    <tr><td colspan="8" class="px-5 py-10 text-center text-sm text-navy-400">No shipments match these filters.</td></tr>
                 @endforelse
             </tbody>
         </table>

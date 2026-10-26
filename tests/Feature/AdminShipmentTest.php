@@ -173,6 +173,104 @@ class AdminShipmentTest extends TestCase
         $this->assertSame(48.8566, (float) $location->latitude);
     }
 
+    public function test_edit_form_offers_pending_and_enroute_statuses(): void
+    {
+        $user = User::factory()->manager()->create();
+        $shipment = Shipment::factory()->create();
+
+        $response = $this->actingAs($user)->get("/admin/shipments/{$shipment->id}/edit");
+
+        $response->assertOk()
+            ->assertSee('Pending')
+            ->assertSee('Enroute')
+            ->assertSee('Picked Up')
+            ->assertSee('Returned');
+    }
+
+    public function test_update_changes_fields_and_records_milestone_on_status_change(): void
+    {
+        $user = User::factory()->manager()->create();
+        $shipment = Shipment::factory()->create(['recipient_name' => 'Old Name']);
+        $enroute = ShipmentStatus::where('slug', 'enroute')->first();
+        $eventCount = $shipment->trackingEvents()->count();
+
+        $this->actingAs($user)
+            ->put("/admin/shipments/{$shipment->id}", [
+                'category_name' => 'Electronics',
+                'description' => 'Updated description',
+                'recipient_name' => 'New Name',
+                'shipment_status_id' => $enroute->id,
+                'current_location_name' => 'Rotterdam',
+            ])
+            ->assertRedirect(route('admin.shipments.show', $shipment));
+
+        $shipment->refresh();
+        $this->assertSame('New Name', $shipment->recipient_name);
+        $this->assertSame('Rotterdam', $shipment->current_location_name);
+        $this->assertSame($enroute->id, $shipment->shipment_status_id);
+        $this->assertSame($eventCount + 1, $shipment->trackingEvents()->count());
+        $this->assertSame('Rotterdam', $shipment->trackingEvents->last()->location_name);
+    }
+
+    public function test_noop_update_creates_no_tracking_event(): void
+    {
+        $user = User::factory()->manager()->create();
+        $shipment = Shipment::factory()->create(['current_location_name' => 'Lyon']);
+        $eventCount = $shipment->trackingEvents()->count();
+
+        $this->actingAs($user)
+            ->put("/admin/shipments/{$shipment->id}", [
+                'category_name' => 'Electronics',
+                'description' => 'No real change',
+                'shipment_status_id' => $shipment->shipment_status_id,
+                'current_location_name' => 'Lyon',
+            ])
+            ->assertRedirect();
+
+        $this->assertSame($eventCount, $shipment->trackingEvents()->count());
+    }
+
+    public function test_tracking_number_can_be_updated_but_must_stay_unique(): void
+    {
+        $user = User::factory()->manager()->create();
+        $shipment = Shipment::factory()->create();
+        $other = Shipment::factory()->create(['tracking_number' => 'TAKEN12345AA']);
+
+        $this->actingAs($user)
+            ->put("/admin/shipments/{$shipment->id}", [
+                'category_name' => 'Docs',
+                'description' => 'x',
+                'shipment_status_id' => $shipment->shipment_status_id,
+                'tracking_number' => 'NEWNUM2026XY',
+            ])
+            ->assertRedirect();
+
+        $this->assertSame('NEWNUM2026XY', $shipment->fresh()->tracking_number);
+
+        $this->actingAs($user)
+            ->put("/admin/shipments/{$shipment->id}", [
+                'category_name' => 'Docs',
+                'description' => 'x',
+                'shipment_status_id' => $shipment->shipment_status_id,
+                'tracking_number' => 'TAKEN12345AA',
+            ])
+            ->assertSessionHasErrors('tracking_number');
+    }
+
+    public function test_support_agent_cannot_update_shipment(): void
+    {
+        $support = User::factory()->support()->create();
+        $shipment = Shipment::factory()->create();
+
+        $this->actingAs($support)
+            ->put("/admin/shipments/{$shipment->id}", [
+                'category_name' => 'Docs',
+                'description' => 'x',
+                'shipment_status_id' => $shipment->shipment_status_id,
+            ])
+            ->assertForbidden();
+    }
+
     public function test_archive_requires_reason_and_hides_from_tracking(): void
     {
         $user = User::factory()->manager()->create();

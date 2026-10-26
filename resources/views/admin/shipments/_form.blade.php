@@ -25,7 +25,8 @@
             @isset($shipment)
                 <div class="sm:col-span-2">
                     <label class="text-sm font-medium text-navy-800">Tracking number</label>
-                    <p class="mt-1 rounded-lg bg-navy-50 px-3 py-2 font-mono text-sm text-navy-800">{{ $s->tracking_number }}</p>
+                    <input name="tracking_number" value="{{ $v('tracking_number') }}" class="{{ $in }} font-mono" placeholder="Leave empty to keep current">
+                    @error('tracking_number')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
             @endisset
             <div>
@@ -41,7 +42,7 @@
                     <label class="text-sm font-medium text-navy-800">Status {!! $req !!}</label>
                     <select name="shipment_status_id" required class="{{ $in }}">
                         @foreach($statuses as $status)
-                            <option value="{{ $status->id }}" @selected($status->slug === 'processing')>{{ $status->name }}</option>
+                            <option value="{{ $status->id }}" @selected((int) old('shipment_status_id', $s?->shipment_status_id ?? 0) === $status->id || (! $s && ! old('shipment_status_id') && $status->slug === 'processing'))>{{ $status->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -142,6 +143,21 @@
                 <div><label class="text-sm font-medium text-navy-800">Country</label>{!! sprintf($countryOpts($v('recipient_country')), 'name="recipient_country"') !!}</div>
             </div>
             <p class="mt-3 text-xs text-navy-400">Public visibility of each field is controlled in Settings → Public Tracking Page Privacy.</p>
+        </section>
+
+        {{-- Remarks --}}
+        <section class="rounded-xl border border-navy-100 bg-white p-6 shadow-sm">
+            <h2 class="font-semibold text-navy-950">Remarks</h2>
+            <div class="mt-5 grid gap-4">
+                <div>
+                    <label class="text-sm font-medium text-navy-800">Public notes <span class="text-xs font-normal text-navy-400">(may be shown on the tracking page)</span></label>
+                    <textarea name="public_notes" rows="2" class="{{ $in }}">{{ $v('public_notes') }}</textarea>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-navy-800">Private notes <span class="text-xs font-normal text-navy-400">(admin only)</span></label>
+                    <textarea name="private_notes" rows="2" class="{{ $in }}">{{ $v('private_notes') }}</textarea>
+                </div>
+            </div>
         </section>
     </div>
 </div>
